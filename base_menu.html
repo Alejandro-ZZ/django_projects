@@ -1,0 +1,87 @@
+{% extends "base_bootstrap.html" %}
+{% load app_tags %}
+{% load i18n %}
+{% load static %}
+{% block head %}
+    <style>
+        .dropdown-menu{
+            left: unset;
+            right: 0;
+        }
+    </style>
+{% endblock %}
+{% block navbar %}
+    <!-- NavBar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="{% static 'images/favimg.png'%}" width="30" alt="">
+                 AlejandroZZ
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- NavBar Links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    {% if request.get_full_path == '/' %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#projects">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#services">Services</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#contact"><button type="button" class="btn btn-outline-light">Contact</button></a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <!-- NavBar Right options -->
+                <ul class="navbar-nav">
+                    <!-- LANGUAGE OPTIONS -->
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% get_current_language as CURRENT_LANGUAGE %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-globe" style="font-size: 150%;"></i>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <form action="{% url 'set_language' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{{ redirect_to }}">
+                                {% for language in languages %}
+                                    {% if language.code == CURRENT_LANGUAGE %}
+                                        <button type="button" class="btn btn-link" value="{{ language.code }}" name="language">{{ language.name_local }}</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-link" value="{{ language.code }}" name="language">{{ language.name_local }}</button>
+                                    {% endif %}
+                                {% endfor %}
+                            </form>
+                        </div>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <!-- Logged in options -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img style="width: 25px;" src="{{ user|gravatar:60 }}"/><b class="caret"></b>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.get_full_path }}"><span class="glyphicon glyphicon-log-out"></span>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <!-- Logged out options -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}?next={{ request.get_full_path }}">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
