@@ -1,0 +1,17 @@
+{% extends "base_menu.html" %}
+{% block content %}
+<div class="container">
+    <div class="card text-white text-center" style="width: 20rem; margin: auto; transform: translateY(50%); background-color: #0dd53b;">
+        <div class="card-body">
+            <h1><i class="fas fa-user"></i></h1>
+            <h1 class="card-title">Visitor counter</h1>
+            <h4 class="card-text">Number of visits: <b><i>{{ visits }}</i></b>.</h4>
+        </div>
+        <div class="card-footer">
+            <p>
+                <i class="fas fa-info-circle"></i> Reload this page to add visits; when it reaches 5, the counter will be reset.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
