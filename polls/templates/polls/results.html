@@ -1,0 +1,30 @@
+{% extends "base_menu.html" %}
+{% block content %}
+    <div class="container" style="text-align: center;">
+        <br>
+        <h1 style="text-align:center; color:gray;"><b>{{ question.question_text }}</b></h1>
+        <hr style="border-top: 4px solid rgba(0, 0, 0, 0.5);">
+        <br>
+        <div style="max-width: 800px; margin: auto;">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Answer</th>
+                        <th scope="col">Votes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for choice in question.choice_set.all %}
+                        <tr>
+                            <td>{{ choice.choice_text }}</td>
+                            <td>{{ choice.votes }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <a href="/polls/" class="btn btn-dark" style="margin-right: 30px;"><i class="fas fa-list-alt"></i> Questions</a>
+            <a href="{% url 'polls:detail' question.id %}" class="btn btn-dark"><i class="fas fa-plus"></i> Vote again</a>
+        </div>
+    </div>
+{% endblock %}
