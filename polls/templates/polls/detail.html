@@ -1,0 +1,31 @@
+{% extends "base_menu.html" %}
+{% block content %}
+    <div class="container">
+        <br>
+        <h1 style="text-align:center; color:gray;"><b>Choices</b></h1>
+        <hr style="border-top: 4px solid rgba(0, 0, 0, 0.5);">
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <div class="card" style="max-width: 50rem; margin: auto;">
+            <h5 class="card-header text-white bg-primary">
+                <i class="fas fa-arrow-circle-right"></i>
+                {{ question.question_text }}
+                <a href="/polls/"><i style="color: white; float: right;" class="fas fa-backspace"></i></a>
+            </h5>
+            <form action="{% url 'polls:vote' question.id %}" method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    {% for choice in question.choice_set.all %}
+                        <div class="radio">
+                            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Vote</button>
+                    <a href="/polls/{{ question.id }}/results/" class="btn btn-primary"><i class="fas fa-poll"></i> View results</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
