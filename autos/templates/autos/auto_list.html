@@ -1,0 +1,44 @@
+{% extends "base_menu.html" %}
+{% block content %}
+    <div class="container text-center">
+        <br>
+        <h1 style="color: gray;"><b>Autos List</b></h1>
+        <hr style="border-top: 4px solid rgba(0, 0, 0, 0.5);">
+        {% if auto_list %}
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Nickname</th>
+                        <th scope="col">Make</th>
+                        <th scope="col">Comments</th>
+                        <th scope="col">Mileage [mph]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for auto in auto_list %}
+                        <tr>
+                            <td>
+                                {{ auto.nickname }}
+                                {% if auto.owner == user %}
+                                    ( <a href="{% url 'autos:auto_update' auto.id %}"><i class="fas fa-pencil-alt"></i></a> |
+                                    <a href="{% url 'autos:auto_delete' auto.id %}"><i class="fas fa-trash-alt"></i></a> )
+                                {% endif %}
+                            </td>
+                            <td>{{ auto.make }}</td>
+                            <td>{{ auto.comments }}</td>
+                            <td>{{ auto.mileage }}</td>
+                        </tr>
+                    {% endfor %}
+            </table>
+        {% else %}
+            <h4><i class="fas fa-info-circle"></i> There are no autos in the library.</h4>
+        {% endif %}
+        {% if make_count > 0 %}
+            <a class="btn btn-secondary" href="{% url 'autos:auto_create' %}"><i class="fas fa-car"></i> Add an auto</a>
+        {% else %}
+            <h4><i class="fas fa-info-circle"></i> Please add a make before you add an auto.</h4>
+        {% endif %}
+        <a class="btn btn-secondary" href="{% url 'autos:make_list' %}">View makes ({{ make_count }})</a>
+        <a class="btn btn-secondary" href="{% url 'autos:make_create' %}"><i class="fas fa-plus"></i> Add a make</a>
+    </div>
+{% endblock %}
