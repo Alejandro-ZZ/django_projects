@@ -1,0 +1,18 @@
+{% extends "base_menu.html" %}
+{% block content %}
+    <div class="container text-center">
+        <br>
+        <h1 style="text-align: center; color: gray;"><b>Delete Ad</b></h1>
+        <hr style="border-top: 4px solid rgba(0, 0, 0, 0.5);">
+        <h4>Are you sure you want to delete the ad: {{ ad }}?</h4>
+        <br>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input class="btn btn-success" type="submit" value="Yes, delete.">
+            <button type="submit" class="btn btn-secondary" onclick="window.location='{% url 'ads:all' %}' ; return false;">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+        </form>
+    </div>
+{% endblock %}
+
