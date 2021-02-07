@@ -1,0 +1,43 @@
+{% extends "base_menu.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="container">
+        <br>
+        <h1 style="text-align: center; color: gray;"><b>Ads Form</b></h1>
+        <hr style="border-top: 4px solid rgba(0, 0, 0, 0.5);">
+        {% if error %}
+            <br>
+            <div class="alert alert-danger" role="alert">
+                <p>
+                    {{ error }}! You have reached the ads limit (3). If you still
+                    want to make some probes, delete one of your three ads or you can
+                    just update them (it's the same as creating a new one).
+                </p>
+                <p>Cheers!<br>Alejandro Z. Z.</p>
+            </div>
+        {% endif %}
+        <p>
+          <form action="" method="post" id="upload_form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Submit</button>
+            <button type="submit" class="btn btn-secondary" onclick="window.location='{% url 'ads:all' %}' ; return false;" value="Cancel">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+          </form>
+        </p>
+    </div>
+    <!-- https://stackoverflow.com/questions/2472422/django-file-upload-size-limit -->
+    <script>
+    $("#upload_form").submit(function() {
+      console.log('Checking file size');
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+          var file = $('#id_{{ form.upload_field_name }}')[0].files[0];
+          if (file && file.size > {{ form.max_upload_limit }} ) {
+              alert("File " + file.name + " of type " + file.type + " must be < {{ form.max_upload_limit_text }}");
+          return false;
+        }
+      }
+    });
+    </script>
+{% endblock %}
