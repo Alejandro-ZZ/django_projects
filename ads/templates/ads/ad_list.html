@@ -1,0 +1,143 @@
+{% extends "base_menu.html" %}
+{% load humanize %} <!-- https://docs.djangoproject.com/en/3.0/ref/contrib/humanize -->
+{% load static %}
+{% block head %}
+    <style>
+        .card{
+            background-color: #343a40;
+        }
+        .text-muted {
+            color: #acacac !important;
+        }
+        .card-body #btn-more{
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+        }
+        .card-body a span{
+            position: absolute;
+            right: 50px;
+            top: 18px;
+        }
+        .card-title h5{
+            margin-bottom: 0px;
+            color: white;
+        }
+        .card-body p{
+            color: white;
+        }
+        #search{
+            float: right;
+        }
+        #search .form-control{
+            display: unset;
+            width: auto;
+        }
+        #search .btn{
+            vertical-align: baseline;
+        }
+        @media (max-width: 574px){
+            .card-body a,
+            .card-body #btn-more{
+                position: unset;
+            }
+            .card-body #edit:after{
+                content: "\00a0 \00a0";
+            }
+        }
+        @media (max-width: 992px){
+            #search{
+                float: none;
+            }
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <br>
+        <h1 style="text-align: center; color: gray;">
+            <b>Ads</b>
+            <button type="button" style="float: right; margin-top: 10px;"
+                    class="btn btn-secondary rounded-pill" onclick="window.location='{% url 'ads:ad_create'%}';">
+              <i class="fas fa-plus"></i> Create Ad
+            </button>
+        </h1>
+        <hr style="border-top: 4px solid rgba(0, 0, 0, 0.5);">
+        <div id="search">
+            <!-- https://www.w3schools.com/howto/howto_css_search_button.asp -->
+            <form>
+                <input type="text" placeholder="Search.." name="search" class="form-control"
+                    {% if search %} value="{{ search }}" {% endif %}
+                >
+                <button type="submit" class="btn btn-dark"><i class="fas fa-search"></i></button>
+                <a href="{% url 'ads:all' %}" class="btn btn-link"><i class="fas fa-undo"></i></a>
+            </form>
+        </div>
+        <p>
+            {% if ad_list %}
+                {% for ad in ad_list %}
+                    <div class="card mb-3" style="max-width: 540px;">
+                      <div class="row no-gutters">
+                          <div class="card-body">
+                                <div class="card-title">
+                                    <h5>
+                                        {{ ad.title }}
+                                        {% if ad.owner == user %}
+                                            ( <a href="{% url 'ads:ad_update' ad.id %}"><i class="fas fa-pencil-alt"></i></a> |
+                                            <a href="{% url 'ads:ad_delete' ad.id %}"><i class="fas fa-trash-alt"></i></a> )
+                                        {% endif %}
+                                    </h5>
+                                    <span class="card-text"><small class="text-muted">posted by {{ ad.owner.username }}</small></span>
+                                </div>
+                            <!-- Favorite Stars-->
+                            {% if user.is_authenticated %}
+                                <!-- Two hrefs with two stacked icons each - one showing and one hidden -->
+                                <a href="#" onclick=
+                                    "favPost('{% url 'ads:ad_unfavorite' ad.id %}', {{ ad.id }} );return false;"
+                                    {% if ad.id not in favorites %} style="display: none;" {% endif %}
+                                    id="favorite_star_{{ad.id}}">
+                                    <span class="fa-stack" style="vertical-align: middle;">
+                                        <i class="fa fa-star fa-stack-1x" style="color: orange;"></i>
+                                        <i class="fa fa-star-o fa-stack-1x"></i>
+                                    </span>
+                                </a>
+                                <!-- the second href -->
+                                <a href="#" onclick=
+                                     "favPost('{% url 'ads:ad_favorite' ad.id %}', {{ ad.id }} );return false;"
+                                    {% if ad.id in favorites %} style="display: none;" {% endif %}
+                                    id="unfavorite_star_{{ad.id}}">
+                                    <span class="fa-stack" style="vertical-align: middle;">
+                                        <i class="fa fa-star fa-stack-1x" style="display: none; color: orange;"></i>
+                                        <!--<i class="fa fa-star-o fa-stack-1x"></i>-->
+                                        <i class="far fa-star fa-stack-1x"></i>
+                                    </span>
+                                </a>
+                            {% endif %}
+                            <p class="card-text" style="text-align: justify;">{{ ad.text }}</p>
+                            <p class="card-text"><small class="text-muted">Last updated: {{ ad.updated_at|naturaltime }}</small></p>
+                            <a id="btn-more" class="btn btn-outline-light btn-sm" href="{% url 'ads:ad_detail'  ad.id %}" role="button">More details</a>
+                          </div>
+                      </div>
+                    </div>
+                    <br>
+                {% endfor %}
+            {% else %}
+                <p>There are no ads in the database.</p>
+            {% endif %}
+        </p>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        function favPost(url, thing_id) {
+            console.log('Requesting JSON');
+            $.post(url, {},  function(rowz){
+                console.log(url, 'finished');
+                $("#unfavorite_star_"+thing_id).toggle();
+                $("#favorite_star_"+thing_id).toggle();
+            }).fail(function(xhr) {
+                alert('Url failed with '+xhr.status+' '+url);
+            });
+        }
+    </script>
+{% endblock %}
