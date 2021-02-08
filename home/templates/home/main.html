@@ -1,1 +1,14 @@
-
+{% extends "base_bootstrap.html" %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <h1 style="text-align: center;">Projects</h1>
+        <hr style="border-top: 4px solid gray">
+        <div class="list-group">
+            <a href="/ads/" class="list-group-item list-group-item-action">Classified ads website</a>
+            <a href="/autos/" class="list-group-item list-group-item-action">Autos CRUD application</a>
+            <a href="/polls/" class="list-group-item list-group-item-action">Poll application</a>
+            <a href="/hello/" class="list-group-item list-group-item-action">Visit counter application</a>
+        </div>
+    </div>
+{% endblock %}
