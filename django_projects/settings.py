@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'django.contrib.humanize'
+    
     'home.apps.HomeConfig',
     'polls.apps.PollsConfig',
     'hello.apps.HelloConfig',
