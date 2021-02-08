@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'home.apps.HomeConfig',
+    'polls.apps.PollsConfig',
+    'hello.apps.HelloConfig',
+    'ads.apps.AdsConfig',
+    'autos.apps.AutosConfig',
 ]
 
 MIDDLEWARE = [
