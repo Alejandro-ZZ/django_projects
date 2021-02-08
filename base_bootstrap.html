@@ -1,13 +1,9 @@
 {% load static %}
-{% load i18n %}
 <!DOCTYPE html>
 <html>
     <head>
         <title>{% block title %}{{ settings.APP_NAME }}{% endblock %}</title>
-        <meta name="dj4e" content="43b52842663fa6e4100c72751d08de6f">
-        <meta name="dj4e-code" content="42160156012074">
         <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" type="text/css">
-        <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
         {% block head %} {% endblock %}
     </head>
@@ -15,8 +11,7 @@
     <body>
         {% block navbar %}  {% endblock %}
         {% block welcome %} {% endblock %}
-        {% block messages %}
-        {% endblock %}
+        {% block messages %} {% endblock %}
         {% block content %} {% endblock %}
         {% block footer %}  {% endblock %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
